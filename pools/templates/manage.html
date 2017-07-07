@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}
+	Pools Manager
+{% endblock %}
+
+{% block content %}
+	<h3>Questão: {{ question.question_text }}</h3>
+	<p>
+		Status: {% if question.closed %}
+					Fechada
+				{% else %}
+					Aberta
+				{% endif %}
+		<a href="{% url 'pools:change_status' question_id=question.id %}" class="btn btn-primary btn-sm">
+			{% if question.closed %}
+				Abrir
+			{% else %}
+				Fechar
+			{% endif %}
+		</a>
+	</p>
+	<p>Data de criação: {{ question.pub_date }}</p>
+
+	<div class="panel panel-default">
+		<!-- Default panel contents -->
+		<div class="panel-heading">Escolhas</div>
+
+		<!-- Table -->
+		<table class="table">
+			
+			<tbody>
+			{% for choice in choices %}
+				<tr>
+					<td>
+						{{ choice.choice_text }} <a href="{% url 'pools:remove' question_id=question.id choice_id=choice.id %}" class="btn btn-danger btn-sm pull-right" onclick="return confirm('Voce tem certeza que deseja deletar escolha?')">Remover</a>
+					</td>
+				</tr>
+			{% empty %}
+				<tr>
+					<td>Não há alternativas ainda.</td>
+				</tr>
+			{% endfor %}					
+			</tbody>
+		
+		</table>
+	</div>
+
+	<hr>
+
+	<div class="panel panel-default">
+		<!-- Default panel contents -->
+		<div class="panel-heading">Todas as Escolhas</div>
+
+		<!-- Table -->
+		<table class="table">
+			
+			<tbody>
+			{% for choice in all_choices %}
+				<tr>
+					<td>
+						{{ choice.choice_text }} <a href="{% url 'pools:add' question_id=question.id choice_id=choice.id %}" class="btn btn-success btn-sm pull-right">Incluir</a>
+					</td>
+				</tr>
+			{% empty %}
+				<tr>
+					<td>Não há alternativas ainda.</td>
+				</tr>
+			{% endfor %}					
+			</tbody>
+		
+		</table>
+	</div>
+
+	<a class="btn btn-default" href="{% url 'pools:home' %}">Início</a>
+	<a class="btn btn-default" href="{% url 'pools:question' question.id %}">Questão</a>
+{% endblock %}
+

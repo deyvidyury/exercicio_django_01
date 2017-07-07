@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}
+	Pool
+{% endblock %}
+
+{% block content %}
+	<h3>Questão: {{ question.question_text }}</h3>
+	<p>Fechada: {{ question.closed }}</p>
+	<p>Data de criação: {{ question.pub_date }}</p>
+
+	<div class="panel panel-default">
+		<!-- Default panel contents -->
+		<div class="panel-heading">Escolhas</div>
+
+		<!-- Table -->
+		<table class="table">
+			
+			<tbody>
+			{% for choice in choices %}
+				<tr>
+					<td>
+						{{ choice.choice_text }} 
+						{% if not question.closed %}
+							<a class="btn btn-primary btn-sm" href="{% url 'pools:vote' question_id=question.id choice_id=choice.id %}">+ 1</a>
+						{% endif %}
+					</td>
+				</tr>
+			{% empty %}
+				<tr>
+					<td>Não há alternativas ainda.</td>
+				</tr>
+			{% endfor %}					
+			</tbody>
+		
+		</table>
+	</div>
+
+	<a class="btn btn-default" href="{% url 'pools:home' %}">Início</a>
+	<a class="btn btn-default" href="{% url 'pools:results' question.id %}">Resultados</a>
+	<a class="btn btn-default" href="{% url 'pools:manage' question.id %}">Manage</a>
+{% endblock %}
+
